@@ -1,23 +1,11 @@
-import React, { useState } from "react";
-import Booking from "./components/Booking";
-import LoyaltyProgram from "./components/LoyaltyProgram";
-import { bookAppointment } from "./services/api";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import BookingForm from "./components/BookingForm";
 
 function App() {
-  const [customerId, setCustomerId] = useState(null);
+  const [searchParams] = useSearchParams();
 
-  const handleBooking = (customerId, service) => {
-    const customerData = bookAppointment(customerId, service);
-    setCustomerId(customerId);
-  };
-
-  return (
-    <div className="App">
-      <h1>Customer Loyalty Program</h1>
-      <Booking onBook={handleBooking} />
-      {customerId && <LoyaltyProgram customerId={customerId} />}
-    </div>
-  );
+  return <div className="App">{<BookingForm />}</div>;
 }
 
 export default App;

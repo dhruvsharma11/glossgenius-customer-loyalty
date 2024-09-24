@@ -1,19 +1,21 @@
+require("dotenv").config({ path: "../.env.local" });
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { Pool } = require("pg");
 const twilio = require("twilio");
 
-const accountSid = "AC8f3b90484f0799331327654c883182ea";
-const authToken = "960280f3c73ea2e94faa24fb4cfac4bf";
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "demo",
-  password: "1nov2003",
-  port: 5432,
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
 });
 
 const app = express();
@@ -145,12 +147,14 @@ app.post("/api/verify-discount", async (req, res) => {
       [email]
     );
 
-    client.release();
-
     if (result.rows.length > 0) {
       const storedCode = result.rows[0].discount_code;
 
       if (storedCode === code) {
+        await client.query(
+          "UPDATE customers SET discount_code = NULL WHERE discount_code = $1",
+          [code]
+        );
         res.status(200).json({
           success: true,
           message: "Discount code is valid.",
@@ -167,6 +171,8 @@ app.post("/api/verify-discount", async (req, res) => {
         message: "Customer not found.",
       });
     }
+
+    client.release();
   } catch (err) {
     console.error("Error verifying discount code", err);
     res.status(500).json({

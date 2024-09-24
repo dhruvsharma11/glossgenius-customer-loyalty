@@ -2,6 +2,12 @@ import { useState, useEffect } from "react";
 import { bookAppointment, getCustomerVisits } from "../utils/api";
 
 function BookingForm() {
+  const initialServices = [
+    { name: "Haircut", price: 30 },
+    { name: "Wash", price: 20 },
+    { name: "Trim", price: 15 },
+  ];
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -12,11 +18,7 @@ function BookingForm() {
   const [verificationMessage, setVerificationMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const [services, setServices] = useState([
-    { name: "Haircut", price: 30 },
-    { name: "Wash", price: 20 },
-    { name: "Trim", price: 15 },
-  ]);
+  const [services, setServices] = useState(initialServices);
 
   useEffect(() => {
     if (email) {
@@ -40,6 +42,7 @@ function BookingForm() {
       });
 
       setSubmitted(true);
+      setService(initialServices);
 
       if (response.data.visits === 5) {
         alert("You've reached 5 visits! A discount code has been sent to you.");

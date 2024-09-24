@@ -6,6 +6,12 @@ When reviewing GlossGenius and its wide array of features, I noticed they have i
 
 This prototype introduces a **Customer Loyalty Program** that rewards users for their repeated bookings. If a user books five times with the same business, they receive a discount code that can be redeemed for future bookings.
 
+## Video Demo
+
+
+https://github.com/user-attachments/assets/327af937-2dc7-4724-be15-d0bde70c6045
+
+
 ## Features
 
 1. **Appointment Booking:**
